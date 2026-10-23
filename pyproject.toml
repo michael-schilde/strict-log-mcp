@@ -1,0 +1,51 @@
+[project]
+name = "strict-log-mcp"
+version = "0.1.0"
+description = "An append-only MCP log server that rejects invalid entries instead of trusting the agent."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Michael Schilde" }]
+requires-python = ">=3.10"
+dependencies = ["mcp>=2,<3"]
+keywords = ["mcp", "model-context-protocol", "claude", "logging", "ai-agents", "validation"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: System :: Logging",
+]
+
+[project.urls]
+Repository = "https://github.com/michael-schilde/strict-log-mcp"
+Issues = "https://github.com/michael-schilde/strict-log-mcp/issues"
+
+[project.scripts]
+strict-log-mcp = "strict_log_mcp.server:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.10"]
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src"]
+
+[[tool.mypy.overrides]]
+module = ["mcp.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

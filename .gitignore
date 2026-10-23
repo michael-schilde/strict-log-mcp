@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local configs and log data never belong in the repository.
+.env
+.env.*
+config.json
+workspace/
+*.jsonl
+!examples/**

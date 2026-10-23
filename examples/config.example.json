@@ -1,0 +1,63 @@
+{
+  "root": "./workspace",
+  "logs": {
+    "activity": {
+      "format": "jsonl",
+      "description": "Completed work, one entry per finished task.",
+      "path": "logs/activity.jsonl",
+      "timestamp_field": "ts",
+      "allow_extra_fields": false,
+      "fields": {
+        "ts": {
+          "required": true,
+          "description": "ISO 8601 timestamp with UTC offset, taken from a real clock",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?[+-]\\d{2}:\\d{2}$",
+          "not_in_future": 120
+        },
+        "agent": {
+          "required": true,
+          "enum": ["planner", "writer", "reviewer"]
+        },
+        "summary": {
+          "required": true,
+          "description": "Must start with 'DONE: '",
+          "pattern": "^DONE: ",
+          "maxlen": 500
+        },
+        "task_id": {
+          "description": "Optional, must be unique across the log",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}-\\d{3}$",
+          "unique": true
+        },
+        "effort_min": { "type": "integer", "min": 0, "max": 600 }
+      }
+    },
+    "corrections": {
+      "format": "jsonl",
+      "description": "Rework that a reviewer requested.",
+      "path": "logs/corrections.jsonl",
+      "timestamp_field": "date",
+      "fields": {
+        "date": { "required": true, "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "not_in_future": true },
+        "task": { "required": true, "maxlen": 200 },
+        "agent": { "required": true },
+        "reviewer": { "required": true },
+        "issue": { "required": true, "maxlen": 500 },
+        "category": { "required": true, "enum": ["factual", "tone", "incomplete", "convention", "context"] },
+        "status": { "required": true, "enum": ["fixed", "open"] }
+      }
+    },
+    "changelog": {
+      "format": "csv",
+      "description": "Edits to existing files; one CHANGELOG.csv per project folder.",
+      "filename": "CHANGELOG.csv",
+      "columns": ["date", "agent", "file", "action", "reason"],
+      "fields": {
+        "date": { "required": true, "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "not_in_future": true },
+        "agent": { "required": true },
+        "file": { "required": true },
+        "action": { "required": true }
+      }
+    }
+  }
+}
